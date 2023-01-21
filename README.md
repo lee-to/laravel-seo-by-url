@@ -1,3 +1,8 @@
+<p align="center">
+    <a href="https://laravel.com"><img alt="Laravel 9+" src="https://img.shields.io/badge/Laravel-9+-FF2D20?style=for-the-badge&logo=laravel"></a>
+    <a href="https://laravel.com"><img alt="PHP 8+" src="https://img.shields.io/badge/PHP-8+-777BB4?style=for-the-badge&logo=php"></a>
+</p>
+
 ### Prolog
 
 Seo data is stored in the database in the `seo` table and
