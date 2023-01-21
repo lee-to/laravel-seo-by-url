@@ -17,6 +17,11 @@ is linked to pages based on the url, the url is unique for websites, therefore, 
 ```shell
 composer require lee-to/laravel-seo-by-url
 ```
+Publish config
+
+```shell
+php artisan vendor:publish --provider="Leeto\Seo\Providers\SeoServiceProvider"
+```
 
 ### MoonShine
 
