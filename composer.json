@@ -40,7 +40,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Leeto\\Seo\\Providers\\SeoServiceProvider"
+              "Leeto\\Providers\\SeoServiceProvider"
             ],
             "aliases": {
                 "Seo": "Leeto\\Seo\\Seo"
