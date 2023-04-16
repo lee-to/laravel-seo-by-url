@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Leeto\Seo\Commands;
 
 use Illuminate\Console\Command;
-use MoonShine\MoonShine;;
+use MoonShine\MoonShine;
 
 final class MoonShineCommand extends Command
 {
