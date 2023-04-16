@@ -1,0 +1,108 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace};
+
+use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Validation\Rule;
+use MoonShine\Actions\ExportAction;
+use MoonShine\Actions\ImportAction;
+use MoonShine\Fields\Text;
+use MoonShine\Fields\TinyMce;
+use MoonShine\Filters\TextFilter;
+use MoonShine\Resources\Resource;
+use MoonShine\Fields\ID;
+use MoonShine\Decorations\Block;
+use MoonShine\Actions\FiltersAction;
+use Leeto\Seo\Rules\UrlRule;
+use Leeto\Seo\Models\Seo;
+use MoonShine\ItemActions\ItemAction;
+
+class SeoResource extends Resource
+{
+    public static string $model = Seo::class;
+
+    public static string $title = 'Seo';
+
+    public string $titleField = 'title';
+
+    public function fields(): array
+    {
+        return [
+            Block::make([
+                ID::make()
+                    ->showOnExport()
+                    ->useOnImport()
+                    ->sortable(),
+
+                Text::make('Url')
+                    ->required()
+                    ->showOnExport()
+                    ->useOnImport(),
+
+                Text::make('Title')
+                    ->required()
+                    ->showOnExport()
+                    ->useOnImport(),
+
+                Text::make('Description')
+                    ->showOnExport()
+                    ->useOnImport(),
+
+                Text::make('Keywords')
+                    ->showOnExport()
+                    ->useOnImport(),
+
+                TinyMce::make('Text')
+                    ->showOnExport()
+                    ->useOnImport()
+            ])
+        ];
+    }
+
+    public function rules(Model $item): array
+    {
+        return [
+            'title' => ['required', 'string', 'min:1'],
+            'url' => [
+                'required',
+                'string',
+                new UrlRule,
+                Rule::unique('seo')->ignoreModel($item)
+            ]
+        ];
+    }
+
+    public function search(): array
+    {
+        return ['id', 'url'];
+    }
+
+    public function filters(): array
+    {
+        return [
+            TextFilter::make('Url')
+        ];
+    }
+
+    public function itemActions(): array
+    {
+        return [
+            ItemAction::make('Go to', function (Seo $item) {
+                header('Location:'.$item->url);
+                die();
+            })->icon('clip')
+        ];
+    }
+
+    public function actions(): array
+    {
+        return [
+            FiltersAction::make('Filters'),
+            ExportAction::make('Export'),
+            ImportAction::make('Import')
+        ];
+    }
+}
