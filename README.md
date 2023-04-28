@@ -23,6 +23,10 @@ Publish config
 php artisan vendor:publish --provider="Leeto\Seo\Providers\SeoServiceProvider"
 ```
 
+```shell
+php artisan migrate
+```
+
 ### MoonShine
 
 if you use the [MoonShine](https://moonshine.cutcode.ru), then publish the resource with this command
@@ -150,3 +154,40 @@ return [
     ]
 ]);
 ```
+
+
+### Inertia
+
+Use Shared Data
+
+```php
+class HandleInertiaRequests extends Middleware
+{
+    //
+    public function share(Request $request)
+    {
+        return array_merge(parent::share($request), [
+            // ...
+            
+            'seo' => [
+                'title' => seo()->meta()->title(),
+                'description' => seo()->meta()->description(),
+                'keywords' => seo()->meta()->keywords(),
+                'og' => seo()->meta()->og(),
+                'text' => seo()->meta()->text(),
+            ]
+        ]);
+    }
+    //
+}
+```
+
+```js
+import { Head } from '@inertiajs/vue3'
+
+<Head>
+  <title>{{ $page.props.seo.title }}</title>
+  <meta name="description" :content="$page.props.seo.description">
+</Head>
+```
+
