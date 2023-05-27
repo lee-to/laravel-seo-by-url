@@ -23,6 +23,8 @@ final class SeoManager implements Stringable
 
     protected array $custom = [];
 
+    protected array $persisted = [];
+
     public function __construct()
     {
         $this->data = $this->cachedByUrl();
@@ -83,6 +85,10 @@ final class SeoManager implements Stringable
 
     public function byUrl(): Model|Seo|null
     {
+        if(isset($this->persisted[(string) $this->url()])) {
+            return $this->persisted[(string) $this->url()];
+        }
+
         return Seo::query()
             ->where('url', (string) $this->url())
             ->first();
@@ -99,12 +105,12 @@ final class SeoManager implements Stringable
             $this->custom[$name] = $arguments[0] ?? '';
 
             if ($arguments[1] ?? false) {
-                Seo::query()->updateOrCreate(
+                $data = Seo::query()->updateOrCreate(
                     ['url' => (string) $this->url()],
                     Arr::except($this->custom, ['og']),
                 );
 
-                $this->flushCache();
+                $this->persisted[$data->url] = $data;
             }
         }
     }
