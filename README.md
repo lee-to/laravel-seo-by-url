@@ -27,6 +27,10 @@ php artisan vendor:publish --provider="Leeto\Seo\Providers\SeoServiceProvider"
 php artisan migrate
 ```
 
+### Are you a visual learner?
+
+We've recorded a [video](https://youtu.be/QjTsC1QF0co) on how to use this package. It's the best way to get started using media library
+
 ### MoonShine
 
 if you use the [MoonShine](https://moonshine.cutcode.ru), then publish the resource with this command
