@@ -13,8 +13,14 @@ final class MoonShineCommand extends Command
 
     public function handle(): int
     {
+        $stub = 'moonshine_seo_resource.stub';
+
+        if($this->confirm('MoonShine v2?')) {
+            $stub = 'moonshine_seo_resource_v2.stub';
+        }
+
         $resource = MoonShine::dir('/Resources/SeoResource.php');
-        $contents = $this->laravel['files']->get(__DIR__ . '/../../stubs/moonshine_seo_resource.stub');
+        $contents = $this->laravel['files']->get(__DIR__ . '/../../stubs/' . $stub);
         $contents = str_replace('{namespace}', MoonShine::namespace('\Resources'), $contents);
 
         $this->laravel['files']->put(
