@@ -52,6 +52,7 @@ class SeoResource extends ModelResource
                     ->useOnImport(),
 
                 TinyMce::make('Text')
+                    ->hideOnIndex()
                     ->showOnExport()
                     ->useOnImport()
             ])
