@@ -5,8 +5,7 @@
 
 ### Prolog
 
-Seo data is stored in the database in the `seo` table and
-is linked to pages based on the url, the url is unique for websites, therefore, the seo in this package is built from it
+Seo data is stored in the database in the `seo` table and is linked to pages based on the url, the url is unique for websites, therefore, the seo in this package is built from it
 
 - Easy to use
 - Not tied to entities
@@ -33,7 +32,7 @@ We've recorded a [video](https://youtu.be/QjTsC1QF0co) on how to use this packag
 
 ### MoonShine
 
-if you use the [MoonShine](https://moonshine.cutcode.ru), then publish the resource with this command
+if you use the [MoonShine](https://moonshine-laravel.com), then publish the resource with this command
 
 ```shell
 php artisan seo:moonshine
@@ -69,7 +68,6 @@ public function __invoke(SeoManager $seo)
 }
 ```
 
-
 * Ok I prefer to use the helper
 
 ### Blade directives
@@ -80,11 +78,11 @@ title, descriptions, keywords, og
 ```html
 <html>
 <head>
-    <!-- // .. -->
+    <!-- // ... -->
 
     @seo
 
-    <!-- // .. -->
+    <!-- // ... -->
 </head>
 ```
 
@@ -129,7 +127,6 @@ seo()->meta()->text()
 seo()->meta()->og()
 ```
 
-
 - get html tags
 
 ```php
@@ -159,7 +156,6 @@ return [
 ]);
 ```
 
-
 ### Inertia
 
 Use Shared Data
@@ -172,7 +168,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             // ...
-            
+
             'seo' => [
                 'title' => seo()->meta()->title(),
                 'description' => seo()->meta()->description(),
@@ -194,4 +190,3 @@ import { Head } from '@inertiajs/vue3'
   <meta name="description" :content="$page.props.seo.description">
 </Head>
 ```
-
