@@ -15,6 +15,6 @@ class UrlCast implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes)
     {
-        return parse_url($value, PHP_URL_PATH) ?? '/';
+        return parse_url((string)$value, PHP_URL_PATH) ?? '/';
     }
 }
