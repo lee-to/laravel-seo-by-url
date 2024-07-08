@@ -89,6 +89,7 @@ class SeoResource extends ModelResource
         return [
             ActionButton::make('Go to', static fn (Seo $item) => $item->url)
                 ->icon('heroicons.outline.paper-clip')
+                ->blank()
         ];
     }
 }
