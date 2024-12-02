@@ -42,7 +42,7 @@ final class SeoManager implements Stringable
 
     public function url(string $url = null): Stringable
     {
-        return str($url ?? request()->path())
+        return str($url ?? request()->getRequestUri())
             ->trim('/')
             ->prepend('/');
     }

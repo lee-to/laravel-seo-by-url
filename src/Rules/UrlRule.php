@@ -10,7 +10,7 @@ class UrlRule implements InvokableRule
 {
     public function __invoke($attribute, $value, $fail)
     {
-        if (! is_string(parse_url($value, PHP_URL_PATH))) {
+        if (! is_string($value) || !preg_match('/^\/[^\s]*$/', $value)) {
             $fail('The :attribute must be a valid url path.');
         }
     }
