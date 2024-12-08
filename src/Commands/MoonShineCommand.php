@@ -13,7 +13,7 @@ final class MoonShineCommand extends Command
 
     public function handle(): int
     {
-        $stub = "moonshine_seo_resource.stub";
+        $stub = 'moonshine_seo_resource.stub';
 
         /** @var ConfiguratorContract $config */
         $config = app(ConfiguratorContract::class);
