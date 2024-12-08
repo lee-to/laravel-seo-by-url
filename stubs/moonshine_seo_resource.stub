@@ -4,69 +4,101 @@ declare(strict_types=1);
 
 namespace {namespace};
 
-use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Validation\Rule;
-use MoonShine\Actions\ExportAction;
-use MoonShine\Actions\ImportAction;
-use MoonShine\Fields\Text;
-use MoonShine\Fields\TinyMce;
-use MoonShine\Filters\TextFilter;
-use MoonShine\Resources\Resource;
-use MoonShine\Fields\ID;
-use MoonShine\Decorations\Block;
-use MoonShine\Actions\FiltersAction;
-use Leeto\Seo\Rules\UrlRule;
 use Leeto\Seo\Models\Seo;
-use MoonShine\ItemActions\ItemAction;
+use Leeto\Seo\Rules\UrlRule;
+use MoonShine\ImportExport\Contracts\HasImportExportContract;
+use MoonShine\ImportExport\ExportHandler;
+use MoonShine\ImportExport\ImportHandler;
+use MoonShine\ImportExport\Traits\ImportExportConcern;
+use MoonShine\Laravel\Handlers\Handler;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Enums\PageType;
+use MoonShine\Support\ListOf;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
 
-class SeoResource extends Resource
+class SeoResource extends ModelResource implements HasImportExportContract
 {
-    public static string $model = Seo::class;
+    use ImportExportConcern;
 
-    public static string $title = 'Seo';
+    protected string $model = Seo::class;
 
-    public string $titleField = 'title';
+    protected string $title = 'Seo';
 
-    public function fields(): array
+    protected string $column = 'title';
+
+    protected bool $detailInModal = true;
+
+    protected ?PageType $redirectAfterSave = PageType::INDEX;
+
+    protected function formFields(): iterable
     {
         return [
-            Block::make([
-                ID::make()
-                    ->showOnExport()
-                    ->useOnImport()
-                    ->sortable(),
-
+            Box::make([
+                ID::make(),
                 Text::make('Url')
-                    ->required()
-                    ->showOnExport()
-                    ->useOnImport(),
-
+                    ->required(),
                 Text::make('Title')
-                    ->required()
-                    ->showOnExport()
-                    ->useOnImport(),
-
-                Text::make('Description')
-                    ->showOnExport()
-                    ->useOnImport(),
-
-                Text::make('Keywords')
-                    ->showOnExport()
-                    ->useOnImport(),
-
-                TinyMce::make('Text')
-                    ->hideOnIndex()
-                    ->showOnExport()
-                    ->useOnImport()
+                    ->required(),
+                Text::make('Description'),
+                Text::make('Keywords'),
+                TinyMce::make('Text'),
             ])
         ];
     }
 
-    public function rules(Model $item): array
+    protected function indexFields(): iterable
     {
         return [
-            'title' => ['required', 'string', 'min:1'],
+            ID::make()
+                ->sortable(),
+            Text::make('Url'),
+            Text::make('Title'),
+            Text::make('Description'),
+            Text::make('Keywords'),
+        ];
+    }
+
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Url'),
+            Text::make('Title'),
+            Text::make('Description'),
+            Text::make('Keywords'),
+            TinyMce::make('Text')
+        ];
+    }
+
+    protected function exportFields(): iterable
+    {
+        return [
+            ID::make(),
+            Text::make('Url'),
+            Text::make('Title'),
+            Text::make('Description'),
+            Text::make('Keywords'),
+        ];
+    }
+
+    protected function importFields(): iterable
+    {
+        return $this->exportFields();
+    }
+
+    protected function rules($item): array
+    {
+        return [
+            'title' => [
+                'required',
+                'string',
+                'min:3'
+            ],
             'url' => [
                 'required',
                 'string',
@@ -78,32 +110,37 @@ class SeoResource extends Resource
 
     public function search(): array
     {
-        return ['id', 'url'];
+        return ['id', 'url', 'title'];
     }
 
     public function filters(): array
     {
         return [
-            TextFilter::make('Url')
+            Text::make('Url'),
+            Text::make('Title'),
         ];
     }
 
-    public function itemActions(): array
+    public function import(): ?Handler
     {
-        return [
-            ItemAction::make('Go to', function (Seo $item) {
-                header('Location:'.$item->url);
-                die();
-            })->icon('clip')
-        ];
+        return ImportHandler::make('Импорт')
+            ->notifyUsers(fn() => [auth()->id()]);
     }
 
-    public function actions(): array
+    public function export(): ?Handler
     {
-        return [
-            FiltersAction::make('Filters'),
-            ExportAction::make('Export'),
-            ImportAction::make('Import')
-        ];
+        return ExportHandler::make('Экспорт')
+            ->filename('seo_resource_export__' . date('Ymd-His'))
+            ->dir('export_files')
+            ->notifyUsers(fn() => [auth()->id()]);
+    }
+
+    public function indexButtons(): ListOf
+    {
+        return parent::indexButtons()->add(
+            ActionButton::make('На страницу', static fn (Seo $item) => $item->url)
+                ->icon('arrow-top-right-on-square')
+                ->blank()
+        );
     }
 }

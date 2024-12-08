@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Leeto\Seo\Commands;
 
 use Illuminate\Console\Command;
-use MoonShine\MoonShine;
+use MoonShine\Contracts\Core\DependencyInjection\ConfiguratorContract;
 
 final class MoonShineCommand extends Command
 {
@@ -13,22 +13,22 @@ final class MoonShineCommand extends Command
 
     public function handle(): int
     {
-        $stub = 'moonshine_seo_resource.stub';
+        $stub = "moonshine_seo_resource.stub";
 
-        if($this->confirm('MoonShine v2?')) {
-            $stub = 'moonshine_seo_resource_v2.stub';
-        }
+        /** @var ConfiguratorContract $config */
+        $config = app(ConfiguratorContract::class);
 
-        $resource = MoonShine::dir('/Resources/SeoResource.php');
-        $contents = $this->laravel['files']->get(__DIR__ . '/../../stubs/' . $stub);
-        $contents = str_replace('{namespace}', MoonShine::namespace('\Resources'), $contents);
+        $resource = $config->getDir() . '/Resources/SeoResource.php';
+
+        $contents = $this->laravel['files']->get(__DIR__ . "/../../stubs/{$stub}");
+        $contents = str_replace('{namespace}', $config->getNamespace('\Resources'), $contents);
 
         $this->laravel['files']->put(
             $resource,
             $contents
         );
 
-        $this->components->info('Now register resource in menu');
+        $this->components->info('Now register resource in MoonShineServiceProvider');
 
         return self::SUCCESS;
     }
