@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Leeto\Seo\Commands;
 
 use Illuminate\Console\Command;
-use MoonShine\MoonShine;
 
 final class MoonShineCommand extends Command
 {
@@ -13,15 +12,31 @@ final class MoonShineCommand extends Command
 
     public function handle(): int
     {
-        $stub = 'moonshine_seo_resource.stub';
+        $version = $this->choice(
+            'Choose MoonShine version (default v3)',
+            [
+                1 => 'v1',
+                2 => 'v2',
+                3 => 'v3',
+            ],
+            'v3'
+        );
 
-        if($this->confirm('MoonShine v2?')) {
-            $stub = 'moonshine_seo_resource_v2.stub';
+        $stub = "moonshine_seo_resource_{$version}.stub";
+
+        if ($version === 'v3') {
+            /** @var \MoonShine\Contracts\Core\DependencyInjection\ConfiguratorContract $config */
+            $config = app(\MoonShine\Contracts\Core\DependencyInjection\ConfiguratorContract::class);
+
+            $resource = $config->getDir() . '/Resources/SeoResource.php';
+            $namespace = $config->getNamespace('\Resources');
+        } else {
+            $resource = \MoonShine\MoonShine::dir() . '/Resources/SeoResource.php';
+            $namespace = \MoonShine\MoonShine::namespace('\Resources');
         }
 
-        $resource = MoonShine::dir('/Resources/SeoResource.php');
-        $contents = $this->laravel['files']->get(__DIR__ . '/../../stubs/' . $stub);
-        $contents = str_replace('{namespace}', MoonShine::namespace('\Resources'), $contents);
+        $contents = $this->laravel['files']->get(__DIR__ . "/../../stubs/{$stub}");
+        $contents = str_replace('{namespace}', $namespace, $contents);
 
         $this->laravel['files']->put(
             $resource,
