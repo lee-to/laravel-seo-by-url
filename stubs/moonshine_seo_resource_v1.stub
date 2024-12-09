@@ -7,18 +7,18 @@ namespace {namespace};
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Validation\Rule;
+use Leeto\Seo\Models\Seo;
+use Leeto\Seo\Rules\UrlRule;
 use MoonShine\Actions\ExportAction;
+use MoonShine\Actions\FiltersAction;
 use MoonShine\Actions\ImportAction;
+use MoonShine\Decorations\Block;
+use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Filters\TextFilter;
-use MoonShine\Resources\Resource;
-use MoonShine\Fields\ID;
-use MoonShine\Decorations\Block;
-use MoonShine\Actions\FiltersAction;
-use Leeto\Seo\Rules\UrlRule;
-use Leeto\Seo\Models\Seo;
 use MoonShine\ItemActions\ItemAction;
+use MoonShine\Resources\Resource;
 
 class SeoResource extends Resource
 {
