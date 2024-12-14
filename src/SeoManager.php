@@ -102,7 +102,7 @@ final class SeoManager implements Stringable
         $seo = Seo::query()->where("url", $url)->first();
         if ($seo) return $seo;
 
-        $baseUrl = parse_url($url, PHP_URL_HOST);
+        $baseUrl = parse_url($url, PHP_URL_PATH);
         $seo = Seo::query()->where("url", $baseUrl)->first();
         if ($seo) return $seo;
 
