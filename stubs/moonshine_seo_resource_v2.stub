@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace {namespace};
 
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Validation\Rule;
+use Leeto\Seo\Models\Seo;
+use Leeto\Seo\Rules\UrlRule;
+use MoonShine\ActionButtons\ActionButton;
+use MoonShine\Decorations\Block;
+use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
 use MoonShine\Resources\ModelResource;
-use MoonShine\Fields\ID;
-use MoonShine\ActionButtons\ActionButton;
-use MoonShine\Decorations\Block;
-use Leeto\Seo\Rules\UrlRule;
-use Leeto\Seo\Models\Seo;
 
 class SeoResource extends ModelResource
 {
