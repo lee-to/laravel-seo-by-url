@@ -42,14 +42,26 @@ final class SeoManager implements Stringable
 
     public function url(string $url = null): Stringable
     {
-        return str($url ?? request()->path())
+        return str($url ?? request()->getRequestUri())
             ->trim('/')
             ->prepend('/');
     }
 
     public function getCacheKey(string $url = null): string
     {
-        return (string) $this->url($url)->slug();
+        $url = (string) $this->url($url);
+        $parsedUrl = parse_url($url);
+        $path = $parsedUrl["path"] ?? '/';
+        $query = isset($parsedUrl["query"]) ? $this->normalizeQuery($parsedUrl["query"]) : '';
+
+       return md5($path . '?' . $query);
+    }
+
+    protected function normalizeQuery(string $query): string
+    {
+        parse_str($query, $params);
+        ksort($params);
+        return http_build_query($params);
     }
 
     public function meta(): SeoMeta
@@ -85,13 +97,22 @@ final class SeoManager implements Stringable
 
     public function byUrl(): Model|Seo|null
     {
-        if(isset($this->persisted[(string) $this->url()])) {
-            return $this->persisted[(string) $this->url()];
+        $url = (string)$this->url();
+
+        $seo = Seo::query()->where("url", $url)->first();
+
+        if ($seo) {
+            return $seo;
         }
 
-        return Seo::query()
-            ->where('url', (string) $this->url())
-            ->first();
+        $baseUrl = parse_url($url, PHP_URL_PATH);
+        $seo = Seo::query()->where("url", $baseUrl)->first();
+
+        if ($seo) {
+            return $seo;
+        }
+
+        return null;
     }
 
     public function __toString(): string

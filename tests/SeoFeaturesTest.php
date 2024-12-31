@@ -40,6 +40,33 @@ final class SeoFeaturesTest extends TestCase
         $this->assertEquals('Description', seo()->meta()->description());
     }
 
+    /**
+     * @test
+     * @return void
+     */
+    public function it_basic_usage_with_params(): void
+    {
+        $this->app->instance('request', Request::create('/test?page=2'));
+
+        $seo = SeoModel::query()->create([
+            'url' => '/test?page=2',
+            'title' => 'Title',
+            'description' => 'Description params',
+        ]);
+
+        $this->assertEquals($seo->title, seo()->meta()->title());
+
+        $seo->update([
+            'title' => 'New title params',
+        ]);
+
+        $this->assertEquals($seo->title, seo()->meta()->title());
+
+        seo()->title('Custom title params');
+
+        $this->assertEquals('Custom title params', seo()->meta()->title());
+        $this->assertEquals('Description params', seo()->meta()->description());
+    }
 
     /**
      * @test
