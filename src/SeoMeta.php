@@ -66,11 +66,10 @@ final class SeoMeta implements Stringable
         return $this->model()->keywords ?? $this->default['keywords'] ?? null;
     }
 
-    public function text(?string $text = ): ?string
+    public function text(?string $text = null): ?string
     {
         return $this->model()->text
-            ? $this->model()->text
-            : $text ?? $this->default['text'] ?? ;
+            ?: $text ?? $this->default['text'] ?? null;
     }
 
     public function html(): string
