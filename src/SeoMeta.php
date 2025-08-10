@@ -15,13 +15,13 @@ final class SeoMeta implements Stringable
 
     protected array $default = [];
 
-    public function __construct(?Seo $model = null, array $og = [])
+    public function __construct(?Seo $model = , array $og = [])
     {
         $this->model = $model ?? new Seo();
         $this->og = $og;
     }
 
-    public static function fromModel(?Seo $model = null): SeoMeta
+    public static function fromModel(?Seo $model = ): SeoMeta
     {
         return new self($model);
     }
@@ -66,11 +66,11 @@ final class SeoMeta implements Stringable
         return $this->model()->keywords ?? $this->default['keywords'] ?? null;
     }
 
-    public function text(string $text = null): ?string
+    public function text(?string $text = ): ?string
     {
         return $this->model()->text
             ? $this->model()->text
-            : $text ?? $this->default['text'] ?? null;
+            : $text ?? $this->default['text'] ?? ;
     }
 
     public function html(): string
@@ -99,7 +99,7 @@ final class SeoMeta implements Stringable
         return $html->value();
     }
 
-    private function metaTag(string $content, string $name = null, string $property = null): string
+    private function metaTag(string $content, ?string $name = , ?string $property = ): string
     {
         return "<meta ".($property ? "property='$property'" : "name='$name'")." content='$content'>".PHP_EOL;
     }
