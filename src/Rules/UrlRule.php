@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Leeto\Seo\Rules;
 
-use Illuminate\Contracts\Validation\InvokableRule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class UrlRule implements InvokableRule
+class UrlRule implements ValidationRule
 {
-    public function __invoke($attribute, $value, $fail)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! is_string($value) || !preg_match('/^\/[^\s]*$/', $value)) {
             $fail('The :attribute must be a valid url path.');

@@ -33,7 +33,7 @@ class Seo extends Model
         'url' => UrlCast::class,
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

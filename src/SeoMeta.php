@@ -66,7 +66,7 @@ final class SeoMeta implements Stringable
         return $this->model()->keywords ?? $this->default['keywords'] ?? null;
     }
 
-    public function text(string $text = null): ?string
+    public function text(?string $text = null): ?string
     {
         return $this->model()->text
             ? $this->model()->text
@@ -99,7 +99,7 @@ final class SeoMeta implements Stringable
         return $html->value();
     }
 
-    private function metaTag(string $content, string $name = null, string $property = null): string
+    private function metaTag(string $content, ?string $name = null, ?string $property = null): string
     {
         return "<meta ".($property ? "property='$property'" : "name='$name'")." content='$content'>".PHP_EOL;
     }
