@@ -40,14 +40,14 @@ final class SeoManager implements Stringable
         return $this->custom;
     }
 
-    public function url(string $url = null): Stringable
+    public function url(?string $url = null): Stringable
     {
         return str($url ?? request()->getRequestUri())
             ->trim('/')
             ->prepend('/');
     }
 
-    public function getCacheKey(string $url = null): string
+    public function getCacheKey(?string $url = null): string
     {
         $url = (string) $this->url($url);
         $parsedUrl = parse_url($url);
@@ -88,7 +88,7 @@ final class SeoManager implements Stringable
         return $data === false ? null : $data;
     }
 
-    public function flushCache(string $key = null): void
+    public function flushCache(?string $key = null): void
     {
         cache()->forget($key ?? $this->getCacheKey());
 
