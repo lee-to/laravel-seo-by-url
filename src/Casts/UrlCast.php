@@ -13,7 +13,7 @@ class UrlCast implements CastsAttributes
         return $value;
     }
 
-    public function set($model, string $key, $value, array $attributes)
+    public function set($model, string $key, $value, array $attributes): string
     {
         $parsedUrl = parse_url((string)$value);
 

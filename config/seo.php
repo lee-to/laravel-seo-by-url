@@ -2,6 +2,6 @@
 
 return [
     'default' => [
-        'title' => env('APP_NAME', '')
+        'title' => env('APP_NAME', ''),
     ]
 ];
