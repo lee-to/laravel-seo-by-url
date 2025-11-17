@@ -6,7 +6,8 @@ namespace Leeto\Seo\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Leeto\Seo\Commands\MoonShineCommand;
+use Leeto\Seo\Commands\MakeResourceCommand;
+use Leeto\Seo\Commands\MakeResourceOldCommand;
 use Leeto\Seo\SeoManager;
 
 class SeoServiceProvider extends ServiceProvider
@@ -38,7 +39,8 @@ class SeoServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                MoonShineCommand::class,
+                MakeResourceCommand::class,
+                MakeResourceOldCommand::class,
             ]);
         }
     }

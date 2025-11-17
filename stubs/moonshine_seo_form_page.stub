@@ -1,0 +1,73 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace}\Pages;
+
+use {namespace}\SeoResource;
+use Illuminate\Validation\Rule;
+use Leeto\Seo\Models\Seo;
+use Leeto\Seo\Rules\UrlRule;
+use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\FormPage;
+use MoonShine\Support\ListOf;
+use MoonShine\TinyMce\Fields\TinyMce;
+use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
+
+/**
+ * @extends FormPage<SeoResource>
+ */
+class SeoFormPage extends FormPage
+{
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function fields(): iterable
+    {
+        return [
+            Box::make([
+                ID::make(),
+                Text::make('Url')
+                    ->required(),
+                Text::make('Title')
+                    ->required(),
+                Text::make('Description'),
+                Text::make('Keywords'),
+                TinyMce::make('Text'),
+            ])
+        ];
+    }
+
+    public function buttons(): ListOf
+    {
+        return parent::buttons()
+            ->prepend(
+                ActionButton::make('На страницу', static fn(Seo $item) => $item->url)
+                    ->icon('arrow-top-right-on-square')
+                    ->blank()
+            );
+    }
+
+    /** @param Seo $item */
+    protected function rules(DataWrapperContract $item): array
+    {
+        return [
+            'title' => [
+                'required',
+                'string',
+                'min:3'
+            ],
+            'url' => [
+                'required',
+                'string',
+                new UrlRule,
+                Rule::unique('seo')->ignoreModel($item)
+            ]
+        ];
+    }
+}

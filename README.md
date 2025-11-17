@@ -5,7 +5,8 @@
 
 ### Prolog
 
-Seo data is stored in the database in the `seo` table and is linked to pages based on the url, the url is unique for websites, therefore, the seo in this package is built from it
+Seo data is stored in the database in the `seo` table and is linked to pages based on the url, the url is unique for
+websites, therefore, the seo in this package is built from it
 
 - Easy to use
 - Not tied to entities
@@ -32,10 +33,14 @@ We've recorded a [video](https://youtu.be/QjTsC1QF0co) on how to use this packag
 
 ### MoonShine
 
-if you use the [MoonShine](https://moonshine-laravel.com), then publish the resource with this command
+if you use the [MoonShine](https://getmoonshine.app/), then publish the resource with this command
 
 ```shell
+#for version 4+
 php artisan seo:moonshine
+
+#for version 3
+php artisan seo:moonshine_old
 ```
 
 ### Get started
