@@ -1,0 +1,72 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace}\Pages;
+
+use {namespace}\SeoResource;
+use Leeto\Seo\Models\Seo;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\IndexPage;
+use MoonShine\Support\ListOf;
+use MoonShine\UI\Components\ActionButton;
+use MoonShine\UI\Components\Table\TableBuilder;
+use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Text;
+
+/**
+ * @extends IndexPage<SeoResource>
+ */
+class SeoIndexPage extends IndexPage
+{
+    protected bool $isLazy = true;
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function fields(): iterable
+    {
+        return [
+            ID::make()
+                ->sortable(),
+            Text::make('Url'),
+            Text::make('Title'),
+            Text::make('Description')
+                ->columnSelection(hideOnInit: true),
+            Text::make('Keywords')
+                ->columnSelection(hideOnInit: true),
+        ];
+    }
+
+    /**
+     * @return list<FieldContract>
+     */
+    public function filters(): array
+    {
+        return [
+            Text::make('Url'),
+            Text::make('Title'),
+        ];
+    }
+
+    public function buttons(): ListOf
+    {
+        return parent::buttons()
+            ->add(
+                ActionButton::make('На страницу', static fn(Seo $item) => $item->url)
+                    ->icon('arrow-top-right-on-square')
+                    ->blank()
+            );
+    }
+
+    /**
+     * @param  TableBuilder  $component
+     *
+     * @return TableBuilder
+     */
+    protected function modifyListComponent(ComponentContract $component): ComponentContract
+    {
+        return $component->columnSelection();
+    }
+}

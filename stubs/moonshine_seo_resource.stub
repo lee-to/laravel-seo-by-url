@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {namespace};
+
+use {namespace}\Pages\SeoDetailPage;
+use {namespace}\Pages\SeoFormPage;
+use {namespace}\Pages\SeoIndexPage;
+use Leeto\Seo\Models\Seo;
+use MoonShine\Contracts\Core\PageContract;
+use MoonShine\Laravel\Resources\ModelResource;
+
+/**
+ * @extends ModelResource<Seo, SeoIndexPage, SeoFormPage, SeoDetailPage>
+ */
+class SeoResource extends ModelResource
+{
+    protected string $model = Seo::class;
+
+    protected string $title = 'Seo';
+
+    protected string $column = 'title';
+
+    protected bool $detailInModal = true;
+
+    /**
+     * @return list<class-string<PageContract>>
+     */
+    protected function pages(): array
+    {
+        return [
+            SeoIndexPage::class,
+            SeoFormPage::class,
+            SeoDetailPage::class,
+        ];
+    }
+
+    public function search(): array
+    {
+        return ['id', 'url', 'title'];
+    }
+}
