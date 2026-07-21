@@ -33,11 +33,15 @@ class SeoFormPage extends FormPage
             Box::make([
                 ID::make(),
                 Text::make('Url')
+                    ->unescape()
                     ->required(),
                 Text::make('Title')
+                    ->unescape()
                     ->required(),
-                Text::make('Description'),
-                Text::make('Keywords'),
+                Text::make('Description')
+                    ->unescape(),
+                Text::make('Keywords')
+                    ->unescape(),
                 TinyMce::make('Text'),
             ])
         ];
