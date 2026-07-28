@@ -13,12 +13,15 @@ final class SeoMeta implements Stringable
 
     protected array $og = [];
 
+    protected string $canonical = '';
+
     protected array $default = [];
 
-    public function __construct(?Seo $model = null, array $og = [])
+    public function __construct(?Seo $model = null, array $og = [], string $canonical = '')
     {
         $this->model = $model ?? new Seo();
         $this->og = $og;
+        $this->canonical = $canonical;
     }
 
     public static function fromModel(?Seo $model = null): SeoMeta
@@ -29,8 +32,9 @@ final class SeoMeta implements Stringable
     public static function fromArray(array $data): SeoMeta
     {
         return new self(
-            new Seo(collect($data)->except('og')->toArray()),
-            $data['og'] ?? []
+            new Seo(collect($data)->except(['og', 'canonical'])->toArray()),
+            $data['og'] ?? [],
+            $data['canonical'] ?? [],
         );
     }
 
@@ -44,6 +48,11 @@ final class SeoMeta implements Stringable
     public function og(): array
     {
         return $this->og;
+    }
+
+    public function canonical(): string
+    {
+        return $this->canonical;
     }
 
     public function model(): Seo
@@ -93,6 +102,10 @@ final class SeoMeta implements Stringable
             foreach ($this->og() as $name => $content) {
                 $html = $html->append($this->metaTag($content, property: "og:$name"));
             }
+        }
+
+        if ($this->canonical()) {
+            $html = $html->append($this->metaTag($this->canonical(), name: 'canonical'));
         }
 
         return $html->value();
