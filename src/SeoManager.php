@@ -15,6 +15,7 @@ use Stringable;
  * @method void keywords(string $value, bool $persist = false)
  * @method void text(string $value, bool $persist = false)
  * @method void og(array $value)
+ * @method void canonical(string $value)
  *
  */
 final class SeoManager implements Stringable
@@ -122,13 +123,13 @@ final class SeoManager implements Stringable
 
     public function __call(string $name, array $arguments)
     {
-        if (in_array($name, ['title', 'description', 'keywords', 'text', 'og'])) {
+        if (in_array($name, ['title', 'description', 'keywords', 'text', 'og', 'canonical'])) {
             $this->custom[$name] = $arguments[0] ?? '';
 
             if ($arguments[1] ?? false) {
                 $data = Seo::query()->updateOrCreate(
                     ['url' => (string) $this->url()],
-                    Arr::except($this->custom, ['og']),
+                    Arr::except($this->custom, ['og', 'canonical']),
                 );
 
                 $this->persisted[$data->url] = $data;

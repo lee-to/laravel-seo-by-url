@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void keywords(string $value, bool $persist = false)
  * @method static void text(string $value, bool $persist = false)
  * @method static void og(array $value)
+ * @method static void canonical(string $value)
  *
  * @see SeoManager
  */
