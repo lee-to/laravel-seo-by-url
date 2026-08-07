@@ -34,7 +34,7 @@ final class SeoMeta implements Stringable
         return new self(
             new Seo(collect($data)->except(['og', 'canonical'])->toArray()),
             $data['og'] ?? [],
-            $data['canonical'] ?? [],
+            $data['canonical'] ?? '',
         );
     }
 
